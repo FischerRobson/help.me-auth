@@ -23,7 +23,6 @@ public class User {
     @Email(message = "Email invalid")
     private String email;
 
-    @Length(min = 8, max = 16, message = "Password length must be between 8 and 16 characters")
     private String password;
 
     @CreationTimestamp

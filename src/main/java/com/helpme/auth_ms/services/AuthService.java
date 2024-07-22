@@ -7,6 +7,7 @@ import com.helpme.auth_ms.model.Login;
 import com.helpme.auth_ms.model.User;
 import com.helpme.auth_ms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -18,25 +19,28 @@ public class AuthService {
     @Autowired
     UserRepository userRepository;
 
-//    @Autowired
-//    PasswordEncoder passwordEncoder;
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    Constants constants;
 
     public String authenticate(Login login) {
         User user = this.userRepository.findByEmail(login.getEmail()).orElseThrow(AuthenticationFailedException::new);
 
-//        boolean passwordMatches = this.passwordEncoder
-//                .matches(login.getPassword(), user.getPassword());
+        boolean passwordMatches = this.passwordEncoder
+                .matches(login.getPassword(), user.getPassword());
 
-//        if (!passwordMatches) {
-//            throw new AuthenticationFailedException();
-//        }
+        if (!passwordMatches) {
+            throw new AuthenticationFailedException();
+        }
 
         Instant expiresIn = Instant.now().plus(Duration.ofMinutes(10));
         String token = JWT.create()
                 .withIssuer("helpme-auth")
                 .withSubject(user.getId().toString())
                 .withExpiresAt(expiresIn)
-                .sign(Constants.algorithm);
+                .sign(constants.getAlgorithm());
 
         return token;
     }
