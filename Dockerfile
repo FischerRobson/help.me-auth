@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y maven
 
 # Copy the pom.xml and install dependencies (cached)
 COPY pom.xml .
+COPY .env .
 RUN mvn dependency:go-offline -B
 
 # Copy the application source code
@@ -19,5 +20,6 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=build /app/target/*.jar myapp.jar
+COPY --from=build /app/.env .env
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "myapp.jar"]
