@@ -2,6 +2,7 @@ package com.helpme.auth_ms.services;
 
 import com.helpme.auth_ms.exceptions.InvalidPasswordException;
 import com.helpme.auth_ms.exceptions.UserAlreadyExistsException;
+import com.helpme.auth_ms.model.Roles;
 import com.helpme.auth_ms.model.User;
 import com.helpme.auth_ms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,24 @@ public class UserService {
         }
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        User savedUser = this.userRepository.save(user);
-        return savedUser;
+
+        user.setRole(Roles.USER);
+        return this.userRepository.save(user);
     }
 
+    public User createSupport(User user) {
+        if (user.getPassword().length() < 8 || user.getPassword().length() > 16) {
+            throw new InvalidPasswordException();
+        }
 
+        Optional<User> userAlreadyExists = this.userRepository.findByEmail(user.getEmail());
+        if (userAlreadyExists.isPresent()) {
+            throw new UserAlreadyExistsException();
+        }
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        user.setRole(Roles.SUPPORT);
+        return this.userRepository.save(user);
+    }
 }

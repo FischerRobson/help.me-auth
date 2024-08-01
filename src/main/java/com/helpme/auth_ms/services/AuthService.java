@@ -39,6 +39,7 @@ public class AuthService {
         String token = JWT.create()
                 .withIssuer("helpme-auth")
                 .withSubject(user.getId().toString())
+                .withClaim("role", user.getRole().toString())
                 .withExpiresAt(expiresIn)
                 .sign(constants.getAlgorithm());
 

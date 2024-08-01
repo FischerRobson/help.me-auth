@@ -21,7 +21,7 @@ public class AuthController {
     public ResponseEntity login(@RequestBody Login login) {
         try {
             String token = this.authService.authenticate(login);
-            return ResponseEntity.status(HttpStatus.OK).body(token);
+            return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }

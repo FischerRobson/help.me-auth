@@ -27,4 +27,6 @@ public class User {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    private Roles role;
 }
