@@ -34,5 +34,4 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/helpme-auth-ms:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/helpme-auth-ms:latest
+          docker buildx build --push --tag ${{ secrets.DOCKER_USERNAME }}/helpme-auth-ms:latest .
