@@ -17,14 +17,17 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Get version from pom.xml
+        id: get_version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
       - name: Build project
         run: mvn clean install -DskipTests
 
       - name: Login docker
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
 
-      - name: Build docker image
-        run: docker build -t fischernz:helpme-auth-ms .
-
-      - name: Publish image
-        run: docker push fischernz:helpme-auth-ms
+      - name: Build and push Docker image
+        run: |
+          docker buildx create --use
+          docker buildx build --push --tag fischernz/helpme-auth-ms:${{ env.VERSION }} .
