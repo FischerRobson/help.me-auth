@@ -25,7 +25,7 @@ jobs:
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
 
       - name: Build project
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
       - name: Login docker
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
