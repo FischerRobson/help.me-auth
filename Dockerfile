@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y maven
 
 # Copy the pom.xml and install dependencies (cached)
 COPY pom.xml .
-COPY .env .
+# COPY .env .
 RUN mvn dependency:go-offline -B
 
 # Copy the application source code
