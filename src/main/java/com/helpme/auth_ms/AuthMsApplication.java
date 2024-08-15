@@ -22,6 +22,7 @@ public class AuthMsApplication {
 			System.setProperty("POSTGRES_PASSWORD", dotenv.get("POSTGRES_PASSWORD"));
 			System.setProperty("POSTGRES_DB", dotenv.get("POSTGRES_DB"));
 			System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
+			System.setProperty("HOST", dotenv.get("HOST"));
 		}
 
 
