@@ -28,5 +28,3 @@ jobs:
 
       - name: Publish image
         run: docker push fischernz:helpme-auth-ms
-
-
