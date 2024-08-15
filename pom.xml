@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.helpme</groupId>
 	<artifactId>auth-ms</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>auth</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>

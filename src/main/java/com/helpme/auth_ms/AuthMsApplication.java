@@ -23,12 +23,10 @@ public class AuthMsApplication {
 			System.setProperty("POSTGRES_DB", dotenv.get("POSTGRES_DB"));
 			System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
 			System.setProperty("HOST", dotenv.get("HOST"));
-
-			String jdbcUrl = "jdbc:postgresql://" + System.getenv("HOST") + "/" + System.getenv("POSTGRES_DB");
-			System.out.println("JDBC URL: " + jdbcUrl);
-
 		}
 
+		String jdbcUrl = "jdbc:postgresql://" + System.getenv("HOST") + "/" + System.getenv("POSTGRES_DB");
+		System.out.println("JDBC URL: " + jdbcUrl);
 
 		SpringApplication.run(AuthMsApplication.class, args);
 	}
