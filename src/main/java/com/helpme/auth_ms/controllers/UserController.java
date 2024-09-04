@@ -1,5 +1,6 @@
 package com.helpme.auth_ms.controllers;
 
+import com.helpme.auth_ms.model.DTO.ChangeRoleRequest;
 import com.helpme.auth_ms.model.Roles;
 import com.helpme.auth_ms.model.User;
 import com.helpme.auth_ms.services.UserService;
@@ -33,9 +34,9 @@ public class UserController {
     }
 
     @PostMapping("/{id}/roles")
-    public ResponseEntity changeRole(@PathVariable("id") UUID userId, @RequestBody Roles role) {
+    public ResponseEntity changeRole(@PathVariable("id") UUID userId, @RequestBody ChangeRoleRequest changeRoleRequest) {
         try {
-            this.userService.changeRole(userId, role);
+            this.userService.changeRole(userId, changeRoleRequest.getRole());
             return ResponseEntity.status(HttpStatus.OK).body("Role changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

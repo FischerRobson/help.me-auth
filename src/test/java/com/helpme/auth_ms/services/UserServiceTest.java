@@ -87,7 +87,7 @@ class UserServiceTest {
     void changeRole_shouldUpdateUserRole() {
         when(userRepository.findById(userId)).thenReturn(Optional.of(testUser));
 
-        userService.changeRole(userId, Roles.ADMIN);
+        userService.changeRole(userId, String.valueOf(Roles.ADMIN));
 
         assertEquals(Roles.ADMIN, testUser.getRole());
         verify(userRepository).save(testUser);
@@ -97,7 +97,7 @@ class UserServiceTest {
     void changeRole_userNotFound_shouldThrowUserNotFoundException() {
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.changeRole(userId, Roles.ADMIN));
+        assertThrows(UserNotFoundException.class, () -> userService.changeRole(userId, String.valueOf(Roles.ADMIN)));
     }
 
     @Test

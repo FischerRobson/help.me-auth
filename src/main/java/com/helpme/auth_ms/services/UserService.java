@@ -44,9 +44,12 @@ public class UserService {
         return this.userRepository.save(validatedUser);
     }
 
-    public void changeRole(UUID userId, Roles newRole) {
+    public void changeRole(UUID userId, String newRole) {
+
+        Roles updatedRole = Roles.fromString(newRole);
+
         User user = this.userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        user.setRole(newRole);
+        user.setRole(updatedRole);
         this.userRepository.save(user);
     }
 
