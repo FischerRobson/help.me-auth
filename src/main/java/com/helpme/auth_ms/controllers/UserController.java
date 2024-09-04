@@ -36,7 +36,8 @@ public class UserController {
     @PostMapping("/{id}/roles")
     public ResponseEntity changeRole(@PathVariable("id") UUID userId, @RequestBody ChangeRoleRequest changeRoleRequest) {
         try {
-            this.userService.changeRole(userId, changeRoleRequest.getRole());
+            Roles checkedRole = Roles.fromString(changeRoleRequest.getRole());
+            this.userService.changeRole(userId, checkedRole);
             return ResponseEntity.status(HttpStatus.OK).body("Role changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
