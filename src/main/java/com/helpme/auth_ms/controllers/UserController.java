@@ -1,5 +1,6 @@
 package com.helpme.auth_ms.controllers;
 
+import com.helpme.auth_ms.model.Roles;
 import com.helpme.auth_ms.model.User;
 import com.helpme.auth_ms.services.UserService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,6 +27,16 @@ public class UserController {
         try {
             User savedUser = this.userService.createUser(user);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/{id}/roles")
+    public ResponseEntity changeRole(@PathVariable("id") UUID userId, @RequestBody Roles role) {
+        try {
+            this.userService.changeRole(userId, role);
+            return ResponseEntity.status(HttpStatus.OK).body("Role changed");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
