@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.time.Instant;
-
 @Service
 public class AuthService {
 
@@ -35,12 +32,12 @@ public class AuthService {
             throw new AuthenticationFailedException();
         }
 
-        Instant expiresIn = Instant.now().plus(Duration.ofMinutes(10));
+
         String token = JWT.create()
                 .withIssuer("helpme-auth")
                 .withSubject(user.getId().toString())
                 .withClaim("role", user.getRole().toString())
-                .withExpiresAt(expiresIn)
+                .withExpiresAt(constants.getJwtExpirationTime())
                 .sign(constants.getAlgorithm());
 
         return token;
