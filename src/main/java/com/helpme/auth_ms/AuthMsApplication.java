@@ -23,6 +23,8 @@ public class AuthMsApplication {
 			System.setProperty("POSTGRES_DB", dotenv.get("POSTGRES_DB"));
 			System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
 			System.setProperty("HOST", dotenv.get("HOST"));
+			System.setProperty("HOST", dotenv.get("HOST"));
+			System.setProperty("JWT_EXPIRATION_TIME_IN_MINUTES", dotenv.get("JWT_EXPIRATION_TIME_IN_MINUTES"));
 		}
 
 		String jdbcUrl = "jdbc:postgresql://" + System.getenv("HOST") + "/" + System.getenv("POSTGRES_DB");

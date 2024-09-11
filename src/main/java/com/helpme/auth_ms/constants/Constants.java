@@ -15,15 +15,18 @@ public class Constants {
     @Value("${security.token.secret}")
     private String secret;
 
-    @Getter
-    private Algorithm algorithm;
+    @Value("${security.token.expiration-minutes}")
+    private long expirationMinutes;
 
     @Getter
-    Instant jwtExpirationTime = Instant.now().plus(Duration.ofMinutes(10));
+    private Algorithm algorithm;
 
     @PostConstruct
     public void init() {
         this.algorithm = Algorithm.HMAC256(secret);
     }
 
+    public Instant getJwtExpirationTime() {
+        return Instant.now().plus(Duration.ofMinutes(expirationMinutes));
+    }
 }
