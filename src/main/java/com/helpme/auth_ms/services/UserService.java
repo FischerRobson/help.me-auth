@@ -5,6 +5,7 @@ import com.helpme.auth_ms.exceptions.UserAlreadyExistsException;
 import com.helpme.auth_ms.exceptions.UserNotFoundException;
 import com.helpme.auth_ms.model.Roles;
 import com.helpme.auth_ms.model.User;
+import com.helpme.auth_ms.model.UserProfile;
 import com.helpme.auth_ms.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,12 +23,14 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    UserProfileService userProfileService;
+
     public User createUser(User user) {
         User validatedUser = this.validateNewUserCreation(user);
 
         validatedUser.setRole(Roles.USER);
         return this.userRepository.save(validatedUser);
-
     }
 
     public User createSupport(User user) {
@@ -62,6 +65,7 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+
         return user;
     }
 }

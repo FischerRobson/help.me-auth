@@ -37,6 +37,7 @@ public class AuthService {
                 .withIssuer("helpme-auth")
                 .withSubject(user.getId().toString())
                 .withClaim("role", user.getRole().toString())
+                .withClaim("email", user.getEmail())
                 .withExpiresAt(constants.getJwtExpirationTime())
                 .sign(constants.getAlgorithm());
 

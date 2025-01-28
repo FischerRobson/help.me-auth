@@ -25,6 +25,7 @@ public class AuthMsApplication {
 			System.setProperty("HOST", dotenv.get("HOST"));
 			System.setProperty("HOST", dotenv.get("HOST"));
 			System.setProperty("JWT_EXPIRATION_TIME_IN_MINUTES", dotenv.get("JWT_EXPIRATION_TIME_IN_MINUTES"));
+			System.setProperty("CORS_ALLOWED_ORIGINS", dotenv.get("CORS_ALLOWED_ORIGINS"));
 		}
 
 		String jdbcUrl = "jdbc:postgresql://" + System.getenv("HOST") + "/" + System.getenv("POSTGRES_DB");
