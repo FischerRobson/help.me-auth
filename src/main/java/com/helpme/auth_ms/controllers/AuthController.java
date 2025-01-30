@@ -24,8 +24,9 @@ public class AuthController {
             String token = this.authService.authenticate(login);
             ResponseCookie cookie = ResponseCookie.from("jwt", token)
                     .httpOnly(true)
-                    .secure(true) // Use true in production
+                    .secure(false) // Use true in production
                     .path("/")
+                    .sameSite("Lax")
                     .maxAge(3600) // 1 hour
                     .build();
             return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).header("Set-Cookie", cookie.toString()).build();
@@ -36,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logouy() {
+    public ResponseEntity logout() {
         try {
             ResponseCookie cookie = ResponseCookie.from("jwt", "")
                     .httpOnly(true)
