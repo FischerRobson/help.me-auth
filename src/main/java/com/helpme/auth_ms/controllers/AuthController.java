@@ -45,7 +45,7 @@ public class AuthController {
                     .path("/")
                     .maxAge(0) // 1 hour
                     .build();
-            return ResponseEntity.status(HttpStatus.OK).header("Set-Cookie", cookie.toString()).build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).header("Set-Cookie", cookie.toString()).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
