@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +24,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     Constants constants;
+
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(
@@ -58,6 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
+        logger.error("Failed to get cookie for request: {}", request.getHeaderNames());
         return null;
     }
 
@@ -68,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .build()
                     .verify(token);
         } catch (Exception e) {
+            logger.error("JWT authentication failed: {}", token);
             return null;
         }
     }
