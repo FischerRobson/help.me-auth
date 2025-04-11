@@ -21,8 +21,19 @@ jobs:
         id: get_version
         run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
 
+      - name: Check if Docker tag already exists
+        run: |
+            echo "Checking if tag $VERSION exists..."
+            response=$(curl -s -o /dev/null -w "%{http_code}" https://hub.docker.com/v2/repositories/fischernz/helpme-auth-ms/tags/${VERSION})
+            if [ "$response" -eq 200 ]; then
+              echo "Docker image with tag $VERSION already exists. Aborting."
+              exit 1
+            else
+              echo "Tag $VERSION does not exist. Proceeding..."
+            fi
+
       - name: Build project
-        run: mvn clean install -DskipTests
+        run: mvn clean install
 
       - name: Login docker
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
