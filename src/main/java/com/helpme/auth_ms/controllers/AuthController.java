@@ -30,7 +30,6 @@ public class AuthController {
                     .maxAge(3600) // 1 hour
                     .build();
             return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).header("Set-Cookie", cookie.toString()).build();
-            // return ResponseEntity.status(HttpStatus.OK).header("Authorization", token).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
@@ -41,9 +40,9 @@ public class AuthController {
         try {
             ResponseCookie cookie = ResponseCookie.from("jwt", "")
                     .httpOnly(true)
-                    .secure(true) // Use true in production
+                    .secure(true)
                     .path("/")
-                    .maxAge(0) // 1 hour
+                    .maxAge(0)
                     .build();
             return ResponseEntity.status(HttpStatus.NO_CONTENT).header("Set-Cookie", cookie.toString()).build();
         } catch (Exception e) {

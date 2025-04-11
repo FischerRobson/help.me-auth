@@ -20,7 +20,7 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/auth/login", "/users").permitAll();
+                    auth.requestMatchers("/auth/login", "/users", "/actuator/prometheus").permitAll();
                     auth.anyRequest().authenticated(); // Secure all other routes
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
