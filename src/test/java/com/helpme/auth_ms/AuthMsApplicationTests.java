@@ -19,13 +19,24 @@ class AuthMsApplicationTests {
 
 	@BeforeAll
 	static void setUp() {
-		Dotenv dotenv = Dotenv.load();
-		System.setProperty("POSTGRES_USER", dotenv.get("POSTGRES_USER"));
-		System.setProperty("POSTGRES_PASSWORD", dotenv.get("POSTGRES_PASSWORD"));
-		System.setProperty("POSTGRES_DB", dotenv.get("POSTGRES_DB"));
-		System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
-		System.setProperty("JWT_EXPIRATION_TIME_IN_MINUTES", dotenv.get("JWT_EXPIRATION_TIME_IN_MINUTES"));
-		System.setProperty("CORS_ALLOWED_ORIGINS", dotenv.get("CORS_ALLOWED_ORIGINS"));
+		try {
+			Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+			setEnv("POSTGRES_USER", dotenv.get("POSTGRES_USER"));
+			setEnv("POSTGRES_PASSWORD", dotenv.get("POSTGRES_PASSWORD"));
+			setEnv("POSTGRES_DB", dotenv.get("POSTGRES_DB"));
+			setEnv("JWT_SECRET", dotenv.get("JWT_SECRET"));
+			setEnv("JWT_EXPIRATION_TIME_IN_MINUTES", dotenv.get("JWT_EXPIRATION_TIME_IN_MINUTES"));
+			setEnv("CORS_ALLOWED_ORIGINS", dotenv.get("CORS_ALLOWED_ORIGINS"));
+		} catch (Exception e) {
+			System.out.println("Warning: .env not loaded. Using environment variables.");
+		}
+	}
+
+	private static void setEnv(String key, String value) {
+		if (value != null && System.getProperty(key) == null) {
+			System.setProperty(key, value);
+		}
 	}
 
 
