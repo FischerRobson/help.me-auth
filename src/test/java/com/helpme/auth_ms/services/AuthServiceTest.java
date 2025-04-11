@@ -103,9 +103,4 @@ class AuthServiceTest {
         verify(userRepository).findByEmail(login.getEmail());
         verify(passwordEncoder).matches(login.getPassword(), testUser.getPassword());
     }
-
-    @Test
-    void failTestToCheckGithubAction() {
-        assertEquals(2, 3);
-    }
 }
