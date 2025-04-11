@@ -26,5 +26,20 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Get version from pom.xml
+        id: get_version
+        run: echo "VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+
+      - name: Check if Docker tag already exists
+        run: |
+          echo "Checking if tag $VERSION exists..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://hub.docker.com/v2/repositories/fischernz/helpme-auth-ms/tags/${VERSION})
+          if [ "$response" -eq 200 ]; then
+            echo "Docker image with tag $VERSION already exists. Aborting."
+            exit 1
+          else
+            echo "Tag $VERSION does not exist. Proceeding..."
+          fi
+
       - name: Run Unit Tests
         run: mvn clean test
