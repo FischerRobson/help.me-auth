@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 
 @Component
 public class Constants {
@@ -23,7 +24,8 @@ public class Constants {
 
     @PostConstruct
     public void init() {
-        this.algorithm = Algorithm.HMAC256(secret);
+        byte[] decodedSecret = Base64.getDecoder().decode(secret);
+        this.algorithm = Algorithm.HMAC256(decodedSecret);
     }
 
     public Instant getJwtExpirationTime() {
