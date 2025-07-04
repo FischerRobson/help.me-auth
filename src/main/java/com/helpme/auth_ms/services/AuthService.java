@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -38,16 +39,17 @@ public class AuthService {
             throw new AuthenticationFailedException();
         }
 
-        String sessionId = UUID.randomUUID().toString();
+        String JWTId = UUID.randomUUID().toString();
 
-        logger.info("User authenticated: {}, with session_id: {}", user.getId(), sessionId);
+        logger.info("User authenticated: {}, with JWTId: {}", user.getId(), JWTId);
 
         String token = JWT.create()
                 .withIssuer("helpme-auth")
                 .withSubject(user.getId().toString())
                 .withClaim("role", user.getRole().toString())
                 .withClaim("email", user.getEmail())
-                .withClaim("session_id", sessionId)
+                .withJWTId(JWTId)
+                .withIssuedAt(new Date())
                 .withExpiresAt(constants.getJwtExpirationTime())
                 .sign(constants.getAlgorithm());
 

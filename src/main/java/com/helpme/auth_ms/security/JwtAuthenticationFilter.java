@@ -12,12 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -40,14 +42,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (decodedJWT != null) {
                 String email = decodedJWT.getClaim("email").asString();
                 String role = decodedJWT.getClaim("role").asString();
+                String userId = decodedJWT.getSubject();
 
-                // Set authentication in SecurityContext
+                List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+
                 UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.emptyList());
-
+                        new UsernamePasswordAuthenticationToken(email, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authToken);
 
                 request.setAttribute("userEmail", email);
+                request.setAttribute("userRole", role);
+                request.setAttribute("userId", userId);
             }
         }
 
@@ -62,7 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         }
-        logger.error("Failed to get cookie for request: {}", request.getHeaderNames());
+        logger.error("Failed to get jwt cookie from request");
         return null;
     }
 
@@ -73,7 +78,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     .build()
                     .verify(token);
         } catch (Exception e) {
-            logger.error("JWT authentication failed: {}", token);
+            logger.warn("JWT validation failed: {}", e.getMessage());
             return null;
         }
     }
